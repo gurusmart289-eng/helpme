@@ -23,12 +23,16 @@ jobs:
           cd my-app
           cordova platform add android
           rm -rf www/*
-          unzip ../*.zip -d www/
+          sudo apt-get update && sudo apt-get install -y unzip
+          unzip -o ../*.zip -d www/ || true
+          if [ -d "www/helpme-main" ]; then
+            cp -r www/helpme-main/* www/
+          fi
           cordova build android --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: App-APK
-          path: my-app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: my-app/platforms/android/app/build/outputs/apk/release/
           
